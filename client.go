@@ -16,7 +16,6 @@ type client struct {
 
 func (c *client) readInput() {
 	for {
-		// msg, err := bufio.NewReader(c.conn).ReadString('\n')
 		msg, err := bufio.NewReader(c.conn).ReadString('\n')
 		if err != nil {
 			return
@@ -25,10 +24,6 @@ func (c *client) readInput() {
 		msg = strings.Trim(msg, "\r")
 		args := strings.Split(msg, " ")
 		cmd := strings.TrimSpace(args[0]) //Eliminar espacios
-
-		// msg = strings.TrimSpace(string(msg))
-		// args := strings.Split(msg, " ")
-		// cmd := strings.TrimSpace(args[0]) //Eliminar espacios
 
 		switch cmd {
 		case "/user":
@@ -69,9 +64,11 @@ func (c *client) readInput() {
 }
 
 func (c *client) err(err error) {
-	c.conn.Write([]byte("ERR: " + err.Error() + "\n"))
+	// c.conn.Write([]byte("ERR: " + err.Error() + "\n"))
+	c.conn.Write([]byte("ERR: " + err.Error() + "\r"))
 }
 
 func (c *client) msg(msg string) {
-	c.conn.Write([]byte("> " + msg + "\n"))
+	// c.conn.Write([]byte("> " + msg + "\n"))
+	c.conn.Write([]byte("> " + msg + "\r"))
 }

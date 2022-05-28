@@ -53,7 +53,7 @@ func (s *server) newClient(conn net.Conn) {
 
 func (s *server) user(c *client, args []string) {
 	c.user = args[1]
-	c.msg(fmt.Sprintf("All right, I will call you %s", c.user))
+	c.msg(fmt.Sprintf("Hola, %s", c.user))
 }
 
 func (s *server) join(c *client, args []string) {
