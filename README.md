@@ -14,7 +14,7 @@ telnet localhost 5000
 
 #### Set a user
 ```
-/user USERNAME
+/user USER
 ```
 
 #### Get all channels
