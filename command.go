@@ -7,6 +7,7 @@ const (
 	CMD_JOIN
 	CMD_CHANNELS
 	CMD_MSG
+	CMD_FILE
 	CMD_QUIT
 )
 

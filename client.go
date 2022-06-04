@@ -50,6 +50,12 @@ func (c *client) readInput() {
 				client: c,
 				args:   args,
 			}
+		case "/file":
+			c.commands <- command{
+				id:     CMD_FILE,
+				client: c,
+				args:   args,
+			}
 		case "/quit":
 			c.commands <- command{
 				id:     CMD_QUIT,
@@ -57,18 +63,16 @@ func (c *client) readInput() {
 				args:   args,
 			}
 		default:
-			c.err(fmt.Errorf("Comando desconocido: %s", cmd))
+			c.err(fmt.Errorf("comando desconocido: %s", cmd))
 		}
 
 	}
 }
 
 func (c *client) err(err error) {
-	// c.conn.Write([]byte("ERR: " + err.Error() + "\n"))
-	c.conn.Write([]byte("ERR: " + err.Error() + "\r"))
+	c.conn.Write([]byte("ERR: " + err.Error() + "\n"))
 }
 
 func (c *client) msg(msg string) {
-	// c.conn.Write([]byte("> " + msg + "\n"))
-	c.conn.Write([]byte("> " + msg + "\r"))
+	c.conn.Write([]byte("> " + msg + "\n"))
 }

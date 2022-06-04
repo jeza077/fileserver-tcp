@@ -31,6 +31,8 @@ func (s *server) run() {
 			s.listChannels(cmd.client, cmd.args)
 		case CMD_MSG:
 			s.msg(cmd.client, cmd.args)
+		case CMD_FILE:
+			s.file(cmd.client, cmd.args)
 		case CMD_QUIT:
 			s.quit(cmd.client, cmd.args)
 		}
@@ -87,16 +89,38 @@ func (s *server) listChannels(c *client, args []string) {
 		channels = append(channels, name)
 	}
 
-	c.msg(fmt.Sprintf("Canles disponibles: %s", strings.Join(channels, ", ")))
+	c.msg(fmt.Sprintf("Canales disponibles: %s", strings.Join(channels, ", ")))
 }
 
 func (s *server) msg(c *client, args []string) {
 	if c.channel == nil {
-		c.err(errors.New("Debes unirte a un canal primero"))
+		c.err(errors.New("debes unirte a un canal primero"))
 		return
 	}
 
 	c.channel.broadcast(c, c.user+": "+strings.Join(args[1:len(args)], " "))
+}
+
+func (s *server) file(c *client, args []string) {
+	if c.channel == nil {
+		c.err(errors.New("debes unirte a un canal primero"))
+		return
+	}
+
+	name, size, bytes, err := LoadFile(args[1])
+	if err != nil {
+		fmt.Println(err)
+		// continue
+	}
+
+	f := &File{
+		Name:    name,
+		Size:    size,
+		Content: bytes,
+	}
+
+	c.channel.broadcast(c, fmt.Sprintf("%s envio un archivo: %s, %d bytes: %d", c.user, f.Name, f.Size, f.Content))
+
 }
 
 func (s *server) quit(c *client, args []string) {
@@ -104,7 +128,7 @@ func (s *server) quit(c *client, args []string) {
 
 	s.quitCurrentChannel(c)
 
-	c.msg(fmt.Sprintf("¡Que vuelvas pronto!"))
+	c.msg(("¡Que vuelvas pronto!"))
 	c.conn.Close()
 }
 
